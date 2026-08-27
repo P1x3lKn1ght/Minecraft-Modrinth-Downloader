@@ -27,3 +27,22 @@ Release → Beta → Alpha
 Once the script has finished, a summary of the downloaded mods will be generated.
 * The summary specify if a mod was successfully downloaded or not and the verion type downloaded (Release, Beta or Alpha).
 * Mods are split between Critical and Optionnal in the summary to help identify missing critical mods such as dependencies or other.
+
+Summary example:
+```
+=========================================
+      DOWNLOAD SUMMARY FOR MC 1.21.11
+=========================================
+
+CRITICAL MODS:
+  - fabric-api: Downloaded (Release)
+  - sodium: Downloaded (Release)
+  - lithium: Downloaded (Release)
+
+OPTIONAL MODS:
+  - iris: Downloaded (Release)
+  - modmenu: Downloaded (Release)
+  - apple-skin: NOT DOWNLOADED (Not Available)
+
+=========================================
+```
