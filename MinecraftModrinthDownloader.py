@@ -1,5 +1,20 @@
 import os
-import requests
+import sys
+import subprocess
+
+# Auto-install 'requests' if missing
+try:
+    import requests
+except ImportError:
+    print("Installing required 'requests' library...")
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
+        import requests
+    except Exception as e:
+        print(f"\n[X] Failed to install 'requests' automatically: {e}")
+        print("Please install it manually by running the following command in Command Prompt: pip install requests")
+        input("\nPress ENTER to exit...")
+        sys.exit(1)
 
 # Change to other loader if needed such as forge, neoforge or quilt
 LOADER = "fabric"
@@ -8,7 +23,7 @@ LOADER = "fabric"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # List of mods to download
-#For example, Fabric API at https://modrinth.com/mod/fabric-api should be written as "fabric-api" including "" with  each mod split by a ","
+# For example, Fabric API at https://modrinth.com/mod/fabric-api should be written as "fabric-api" including "" with each mod split by a ","
 CRITICAL_MODS = []
 OPTIONAL_MODS = []
 
@@ -72,11 +87,17 @@ def download_file(url, target_path):
     except Exception as e:
         print(f"  Download error: {e}")
 
+    return False
+
 def process_mod_list(mod_list, is_critical, mc_version, output_dir):
     results = [] 
     category_name = "Critical" if is_critical else "Optional"
     
     print(f"\n--- Processing {category_name} Mods ---")
+    
+    if not mod_list:
+        print("  No mods configured in this list.")
+        return results
     
     for mod in mod_list:
         print(f"Checking '{mod}'...")
@@ -102,6 +123,10 @@ def process_mod_list(mod_list, is_critical, mc_version, output_dir):
 
 def format_summary_section(title, results):
     section_str = f"\n{title}:\n"
+    if not results:
+        section_str += "  - None processed (list was empty)\n"
+        return section_str
+
     for mod, status in results:
         if status in ["release", "beta", "alpha"]:
             section_str += f"  - {mod}: Downloaded ({status.capitalize()})\n"
