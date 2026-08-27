@@ -25,8 +25,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # List of mods to download
 # For example, Fabric API at https://modrinth.com/mod/fabric-api should be written as "fabric-api" including "" with each mod split by a ","
-CRITICAL_MODS = []
-OPTIONAL_MODS = []
+CRITICAL_MODS = ["fabric-api","sodium","cloth-config","entityculling","ferrite-core","modmenu","lithium","immediatelyfast","fabric-language-kotlin","sodium-extra","moreculling","placeholder-api","konkrete","malilib"]
+OPTIONAL_MODS = ["iris","entitytexturefeatures","xaeros-world-map","entity-model-features","continuity","lambdynamiclights","shulkerboxtooltip","distanthorizons","betterf3","bsl-shaders","optigui","litematica","freecam","replaymod","durability-tooltip","axiom","worldedit","just-zoom","minihud","vivecraft","axolotl-buckets","distanthorizonsapi","chat-signing-hider"]
 
 API_BASE = "https://api.modrinth.com/v2"
 HEADERS = {"User-Agent": "MinecraftModrinthDownloader (https://github.com/P1x3lKn1ght/Minecraft-Modrinth-Downloader)"}
