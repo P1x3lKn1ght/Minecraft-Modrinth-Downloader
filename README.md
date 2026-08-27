@@ -13,7 +13,7 @@ The list of mods to download need to be entered in the variables `CRITICAL_MODS 
 * For example, Fabric API at https://modrinth.com/mod/fabric-api should be written as `"fabric-api"` including `""` with each mod split by a `,`.
 
 ## Launching the script
-To launch the script, you will need to have python installed. You can download the latest version from https://www.python.org/downloads/.
+To launch the script, you will need to have Python installed. You can download the latest version from https://www.python.org/downloads/.
 
 To lauch the script double click it from your file explorer.
 
