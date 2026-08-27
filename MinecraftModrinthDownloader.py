@@ -24,8 +24,9 @@ LOADER = "fabric"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # List of mods to download
-CRITICAL_MODS = []
-OPTIONAL_MODS = []
+# For example, Fabric API at https://modrinth.com/mod/fabric-api should be written as "fabric-api" including "" with each mod split by a ","
+CRITICAL_MODS = ["fabric-api","ferrite-core","lithium","chunky"]
+OPTIONAL_MODS = ["clumps","axiom","worldedit","vivecraft","servux","bluemap","mob-heads","tabtps"]
 
 API_BASE = "https://api.modrinth.com/v2"
 HEADERS = {"User-Agent": "MinecraftModrinthDownloader (https://github.com/P1x3lKn1ght/Minecraft-Modrinth-Downloader)"}
