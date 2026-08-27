@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import glob
 
 # Auto-install 'requests' if missing
 try:
@@ -23,12 +24,30 @@ LOADER = "fabric"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # List of mods to download
-# For example, Fabric API at https://modrinth.com/mod/fabric-api should be written as "fabric-api" including "" with each mod split by a ","
 CRITICAL_MODS = []
 OPTIONAL_MODS = []
 
 API_BASE = "https://api.modrinth.com/v2"
 HEADERS = {"User-Agent": "MinecraftModrinthDownloader (https://github.com/P1x3lKn1ght/Minecraft-Modrinth-Downloader)"}
+
+def wipe_mods_directory(output_dir):
+    """Deletes all existing .jar files in the folder to ensure a clean directory."""
+    if not os.path.exists(output_dir):
+        return
+
+    print("\n--- Cleaning Mods Folder ---")
+    existing_files = glob.glob(os.path.join(output_dir, "*.jar"))
+    
+    if not existing_files:
+        print("  No existing .jar files found to remove.")
+        return
+
+    for file_path in existing_files:
+        try:
+            os.remove(file_path)
+            print(f"  Deleted old mod: {os.path.basename(file_path)}")
+        except Exception as e:
+            print(f"  Warning: Could not remove {os.path.basename(file_path)}: {e}")
 
 def get_best_compatible_version(project_slug, mc_version, loader):
     url = f"{API_BASE}/project/{project_slug}/version"
@@ -40,7 +59,6 @@ def get_best_compatible_version(project_slug, mc_version, loader):
     try:
         response = requests.get(url, headers=HEADERS, params=params, timeout=10)
         
-        # Check HTTP status codes
         if response.status_code == 404:
             print(f"  Error: Mod '{project_slug}' was not found on Modrinth.")
             return None
@@ -139,24 +157,23 @@ def main():
     print("      Minecraft Modrinth Downloader      ")
     print("=========================================\n")
 
-    # Prompt the user for the target Minecraft version
     mc_version = input("Enter the target Minecraft version (e.g., 1.20.1): ").strip()
     if not mc_version:
         print("No version entered. Exiting.")
         return
 
-    # Folder Structure Setup:
     main_version_dir = os.path.join(SCRIPT_DIR, mc_version)
     mods_dir = os.path.join(main_version_dir, mc_version)
     
     os.makedirs(mods_dir, exist_ok=True)
     print(f"Saving mods to: {mods_dir}")
 
-    # Process both mod lists (files download into the nested mods_dir)
+    # Completely clear out all existing .jar files before fetching new ones
+    wipe_mods_directory(mods_dir)
+
     critical_results = process_mod_list(CRITICAL_MODS, is_critical=True, mc_version=mc_version, output_dir=mods_dir)
     optional_results = process_mod_list(OPTIONAL_MODS, is_critical=False, mc_version=mc_version, output_dir=mods_dir)
         
-    # Build detailed summary string
     summary_text = "\n" + "=========================================" + "\n"
     summary_text += f"      DOWNLOAD SUMMARY FOR MC {mc_version}\n"
     summary_text += "=========================================" + "\n"
@@ -164,10 +181,8 @@ def main():
     summary_text += format_summary_section("OPTIONAL MODS", optional_results)
     summary_text += "\n" + "========================================="
 
-    # Print summary to console
     print(summary_text)
 
-    # Save summary to Summary.txt in the main version folder
     summary_file_path = os.path.join(main_version_dir, "Summary.txt")
     with open(summary_file_path, "w", encoding="utf-8") as f:
         f.write(summary_text.strip() + "\n")
