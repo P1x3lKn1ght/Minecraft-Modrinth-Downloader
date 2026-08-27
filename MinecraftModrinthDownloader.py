@@ -24,6 +24,7 @@ LOADER = "fabric"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # List of mods to download
+# For example, Fabric API at https://modrinth.com/mod/fabric-api should be written as "fabric-api" including "" with each mod split by a ","
 CRITICAL_MODS = []
 OPTIONAL_MODS = []
 
